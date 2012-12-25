@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>iParallax</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<style>
+	* {
+		margin: 0;
+		padding: 0;
+	}
+	html,body {
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+	}
+	#container,#container-scroll {
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+	#start {
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+	#start h1 {
+		position:absolute;
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%,-50%);
+		white-space: nowrap;
+	}
+	#logo {
+		position: relative;
+		width: 100%;
+		height: 100%;
+		font-size:48px;
+		white-space: nowrap;
+	}
+	#logo-block {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		-webkit-transform: translate(-50%,-50%);
+	}
+	#logo-block > span {
+		display: inline-block;
+	}
+	.blank {
+		width: 100%;
+		height: 100%;
+	}
+	#finish {
+		width: 100%;
+		height: 100%;
+		position: relative;
+	}
+	#finish > span {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		font-size: 32px;
+		-webkit-transform: translate(-50%,-50%);
+	}
+</style>
+</head>
+<body>
+	<div id="container">
+		<div id="container-scroll">
+			<div id="start"><h1>Scroll Down!!</h1></div>
+			<div  id="logo" class="spot">
+				<div id="logo-block">
+					<span id="t01">i</span>
+					<span id="t02">P</span>
+					<span id="t03">a</span>
+					<span id="t04">r</span>
+					<span id="t05">a</span>
+					<span id="t06">l</span>
+					<span id="t07">l</span>
+					<span id="t08">a</span>
+					<span id="t09" >x</span>
+				</div>
+			</div>
+			<div class="blank"></div>
+			<div id="finish"><span id="fin">Fin.</span></div>
+		</div>
+	</div>
+<script src="iParallax.js"></script>
+<script>
+var spot = [];
+var ipara = new iParallax(document.getElementById("container"),{
+	maxX: 0,
+	onResize: function() {
+		for (var i = 0; i < spot.length;i++) {
+			spot[i].setEnd({
+				y: window.innerHeight
+			});
+		}
+	}
+});
+var text1 = {
+	start: {
+		y: 200,
+	},
+	end: {
+		y: window.innerHeight
+	},
+	callback: {
+		before: function(x,y) {
+			this.style.webkitTransform = ipara.getTranslate(0,-80,"px");
+		},
+		during: function(x,y,sx,sy) {
+			this.style.webkitTransform = ipara.getTranslate(0,-80+(80*sy/100),"px");
+		},
+		after: function(x,y) {
+			this.style.webkitTransform = ipara.getTranslate(0,0);
+		}
+	}
+};
+var text2 = {
+	start: {
+		y: 150
+	},
+	end: {
+		y: window.innerHeight
+	},
+	callback: {
+		before: function(x,y) {
+			this.style.webkitTransform = ipara.getTranslate(0,120,"px");
+		},
+		during: function(x,y,sx,sy) {
+			this.style.webkitTransform = ipara.getTranslate(0,120-(120*sy/100),"px");
+		},
+		after: function(x,y) {
+			this.style.webkitTransform = ipara.getTranslate(0,0);
+		}
+	}
+};
+for (var i = 0; i < 9;i++) {
+	var io = new iParallaxObject(document.getElementById("t0" + (i+1)));
+	if (i % 2 === 0) {
+		io.setStart(text1.start);
+		io.setEnd(text1.end);
+		io.setCallback(text1.callback);
+	} else {
+		io.setStart(text2.start);
+		io.setEnd(text2.end);
+		io.setCallback(text2.callback);
+	}
+	spot.push(io);
+	ipara.addObject("t0" + (i+1),io);
+}
+
+var io = new iParallaxObject(document.getElementById("logo"));
+io.setStart({
+	y: window.innerHeight
+});
+io.setEnd({
+	y:window.innerHeight*2
+});
+io.setCallback({
+	before: function(x,y) {
+		this.style.webkitTransform = ipara.getTranslate(0,0,"%");
+		this.style.fontSize = "48px";
+	},
+	during: function(x,y,sx,sy) {
+		this.style.webkitTransform = ipara.getTranslate(0,sy,"%");
+		this.style.fontSize = 48-sy/5+"px";
+	}
+});
+ipara.addObject("logo",io);
+
+var io2 = new iParallaxObject(document.getElementById("fin"));
+io2.setStart({
+	y: window.innerHeight*2
+});
+io2.setEnd({
+	y:window.innerHeight*3
+});
+io2.setCallback({
+	before: function(x,y) {
+		this.style.webkitTransform = "translate(-50%,-50%) rotate(0deg)"
+	},
+	during: function(x,y,sx,sy) {
+		this.style.webkitTransform = "translate(-50%,-50%) rotate("+360*(sy/100)+"deg)"
+	}
+});
+ipara.addObject("fin",io2);
+</script>
+</body>
+</html>
